@@ -1,0 +1,12 @@
+{
+  "name": "pomodoro",
+  "version": "1.0.0",
+  "description": "桌面番茄钟 - 专注计时工具",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^28.0.0"
+  }
+}

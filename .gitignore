@@ -1,0 +1,7 @@
+node_modules/
+capture.html
+figma-capture.png
+pomodoro-neumorphic.png
+*.log
+.DS_Store
+Thumbs.db

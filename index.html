@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+  <title>番茄钟</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Title Bar -->
+  <div class="titlebar">
+    <div class="titlebar-drag">
+      <span class="titlebar-dot"></span>
+      <span class="titlebar-text" data-i18n="title">番茄钟</span>
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize" title="─">─</button>
+      <button class="titlebar-btn" id="btn-close" title="✕">✕</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="timer" data-i18n="timerTab">计时</button>
+      <button class="tab" data-tab="stats" data-i18n="statsTab">统计</button>
+      <button class="tab" data-tab="settings" data-i18n="settingsTab">设置</button>
+    </div>
+
+    <!-- Timer Panel -->
+    <div class="panel active" id="panel-timer">
+      <div class="mode-indicator" id="mode-indicator" data-i18n="modeWork">专注时间</div>
+      <div class="timer-ring">
+        <svg viewBox="0 0 220 220" class="progress-ring">
+          <circle cx="110" cy="110" r="100" class="ring-bg" />
+          <circle cx="110" cy="110" r="100" class="ring-progress" id="ring-progress" />
+        </svg>
+        <div class="timer-display">
+          <div class="timer-time" id="timer-display">25:00</div>
+          <div class="timer-label" id="timer-label" data-i18n="labelIdle">准备就绪</div>
+        </div>
+      </div>
+      <div class="pomodoro-dots" id="pomodoro-dots"></div>
+      <div class="controls">
+        <button class="btn btn-primary" id="btn-start" data-i18n="btnStart">开始</button>
+        <button class="btn btn-secondary" id="btn-reset" data-i18n="btnReset">重置</button>
+      </div>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="panel" id="panel-stats">
+      <h2 class="panel-title" data-i18n="statsTitle">今日统计</h2>
+      <div class="stats-summary">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-today">0</div>
+          <div class="stat-label" data-i18n="statToday">今日番茄</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-week">0</div>
+          <div class="stat-label" data-i18n="statWeek">本周番茄</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label" data-i18n="statTotal">总番茄</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-minutes">0</div>
+          <div class="stat-label" data-i18n="statMinutes">总分钟</div>
+        </div>
+      </div>
+      <h2 class="panel-title" data-i18n="trendTitle">本周趋势</h2>
+      <div class="week-chart" id="week-chart"></div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="panel" id="panel-settings">
+      <h2 class="panel-title" data-i18n="settingTitle">计时设置</h2>
+      <div class="setting-group">
+        <div class="setting">
+          <label class="setting-label" data-i18n-label="labelWork">专注时长（分钟）</label>
+          <input type="number" class="setting-input" id="setting-work" min="1" max="120" value="25">
+        </div>
+        <div class="setting">
+          <label class="setting-label" data-i18n-label="labelBreak">短休息时长（分钟）</label>
+          <input type="number" class="setting-input" id="setting-break" min="1" max="60" value="5">
+        </div>
+        <div class="setting">
+          <label class="setting-label" data-i18n-label="labelLongBreak">长休息时长（分钟）</label>
+          <input type="number" class="setting-input" id="setting-longbreak" min="1" max="120" value="15">
+        </div>
+        <div class="setting">
+          <label class="setting-label" data-i18n-label="labelInterval">番茄数后长休息</label>
+          <input type="number" class="setting-input" id="setting-interval" min="1" max="10" value="4">
+        </div>
+      </div>
+
+      <h2 class="panel-title" data-i18n="notifyTitle">通知设置</h2>
+      <div class="setting-group">
+        <div class="setting toggle-setting">
+          <span class="setting-label" data-i18n-label="labelSound">音效提示</span>
+          <label class="toggle">
+            <input type="checkbox" id="setting-sound" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting toggle-setting">
+          <span class="setting-label" data-i18n-label="labelNotify">系统通知</span>
+          <label class="toggle">
+            <input type="checkbox" id="setting-notification" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <h2 class="panel-title">⏎</h2>
+      <div class="setting-group">
+        <div class="setting">
+          <span class="setting-label" data-i18n-label="labelLang">语言</span>
+          <select class="setting-select" id="setting-lang">
+            <option value="zh-CN">中文</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-actions">
+        <button class="btn btn-primary save-btn" id="btn-save-settings" data-i18n="btnSave">保存设置</button>
+        <button class="btn btn-danger" id="btn-reset-settings" data-i18n="btnResetSettings">恢复默认</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
